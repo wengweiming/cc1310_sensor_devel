@@ -1,0 +1,9 @@
+# This file is use for ignore some file for git 
+
+sensor_cc1310lp/sensor_cc1310lp
+
+.jxbrowser-data/
+
+.metadata/
+
+RemoteSystemsTempFiles/
