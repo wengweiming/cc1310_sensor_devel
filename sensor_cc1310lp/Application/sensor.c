@@ -59,6 +59,9 @@
 #include "board_led.h"
 #include "icall.h"
 
+#include "sensor_bh1750.h"
+#include "board_lcd.h"
+
 #ifdef FEATURE_NATIVE_OAD
 #include "oad_client.h"
 #endif //FEATURE_NATIVE_OAD
@@ -98,7 +101,7 @@
 #define MAX_REPORTING_INTERVAL 360000
 
 /* Polling Interval Min and Max (in milliseconds) */
-#define MIN_POLLING_INTERVAL 1000
+#define MIN_POLLING_INTERVAL 100    //1000
 #define MAX_POLLING_INTERVAL 10000
 
 /* Inter packet interval in certification test mode */
@@ -174,6 +177,8 @@ STATIC Smsgs_lightSensorField_t lightSensor =
  */
 STATIC Smsgs_humiditySensorField_t humiditySensor =
     { 0 };
+
+STATIC Smsgs_bh1750SensorField_t bh1750Sensor = {0};
 
 STATIC Llc_netInfo_t parentInfo = {0};
 
@@ -839,6 +844,11 @@ static void processSensorMsgEvt(void)
         sensor.configSettings.reportingInterval = configSettings
                         .reportingInterval;
     }
+    if(sensor.frameControl & Smsgs_dataFields_bh1750Sensor)
+    {
+        memcpy(&sensor.bh1750Sensor, &bh1750Sensor,
+               sizeof(Smsgs_bh1750SensorField_t));
+    }
 
     /* inform the user interface */
     Ssf_sensorReadingUpdate(&sensor);
@@ -882,6 +892,10 @@ static bool sendSensorMessage(ApiMac_sAddr_t *pDstAddr, Smsgs_sensorMsg_t *pMsg)
     if(pMsg->frameControl & Smsgs_dataFields_configSettings)
     {
         len += SMSGS_SENSOR_CONFIG_SETTINGS_LEN;
+    }
+    if(pMsg->frameControl & Smsgs_dataFields_bh1750Sensor)
+    {
+        len += SMSGS_SENSOR_BH1750_LEN;
     }
 
     pMsgBuf = (uint8_t *)Ssf_malloc(len);
@@ -948,6 +962,10 @@ static bool sendSensorMessage(ApiMac_sAddr_t *pDstAddr, Smsgs_sensorMsg_t *pMsg)
             pBuf = Util_bufferUint32(pBuf,
                                      pMsg->configSettings.pollingInterval);
 
+        }
+        if(pMsg->frameControl & Smsgs_dataFields_bh1750Sensor)
+        {
+            pBuf = Util_bufferUint16(pBuf, pMsg->bh1750Sensor.light);
         }
 
         ret = Sensor_sendMsg(Smsgs_cmdIds_sensorData, pDstAddr, true, len, pMsgBuf);
@@ -1161,6 +1179,12 @@ static uint16_t validateFrameControl(uint16_t frameControl)
     {
         newFrameControl |= Smsgs_dataFields_configSettings;
     }
+#if defined(BH1750_SENSOR)
+    if(frameControl & Smsgs_dataFields_bh1750Sensor)
+    {
+        newFrameControl |= Smsgs_dataFields_bh1750Sensor;
+    }
+#endif
 
     return (newFrameControl);
 }
@@ -1320,5 +1344,19 @@ static void readSensors(void)
     /* Read the temp sensor values */
     tempSensor.ambienceTemp = Ssf_readTempSensor();
     tempSensor.objectTemp =  tempSensor.ambienceTemp;
+#endif
+
+#if defined(BH1750_SENSOR)
+    uint8_t bh1750ReadBuf[2];
+    uint8_t bh1750WriteBuf[1];
+
+    bh1750WriteBuf[0] = ONE_H_MODE_1;   // 填入发送数据
+    BH1750_read(bh1750WriteBuf, 1, bh1750ReadBuf, 2);
+    if (bh1750TransferDone) {
+        bh1750Sensor.light = ((bh1750ReadBuf[0] << 8) | bh1750ReadBuf[1]) / 1.2;
+        LCD_WRITE_STRING_VALUE("BH1750_Data = ", bh1750Sensor.light, 10, 0);
+    } else {
+        LCD_WRITE_STRING("BH1750 read failed", 0);
+    }
 #endif
 }

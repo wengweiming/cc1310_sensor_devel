@@ -66,6 +66,9 @@
 #include <inc/hw_ccfg.h>
 #include <inc/hw_ccfg_simple_struct.h>
 
+#include <ti/drivers/I2C.h>
+#include "sensor_bh1750.h"
+
 /* Header files required for the temporary idle task function */
 #include <ti/drivers/Power.h>
 #include <ti/drivers/power/PowerCC26XX.h>
@@ -306,6 +309,10 @@ Void taskFxn(UArg a0, UArg a1)
 
     /* Initialize the application */
     Sensor_init();
+
+    // sensor initialization
+    I2C_init();
+    BH1750_init();
 
     /* Kick off application - Forever loop */
     while(1)

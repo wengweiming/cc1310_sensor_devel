@@ -94,7 +94,7 @@ extern "C"
 #define CONFIG_ORPHAN_BACKOFF_INTERVAL 300000
 
 /*! Setting for Phy ID */
-#define CONFIG_PHY_ID                (APIMAC_STD_US_915_PHY_1)
+#define CONFIG_PHY_ID                (APIMAC_GENERIC_CHINA_433_PHY_128)     //(APIMAC_STD_US_915_PHY_1)
 
 #if ((CONFIG_PHY_ID >= APIMAC_MRFSK_STD_PHY_ID_BEGIN) && (CONFIG_PHY_ID <= APIMAC_MRFSK_STD_PHY_ID_END))
 /*! Setting for channel page */
@@ -140,7 +140,7 @@ extern "C"
  APIMAC_STD_ETSI_863_PHY_3 (50kbps/2-FSK/863MHz band) has channels 0 - 33.
  APIMAC_GENERIC_CHINA_433_PHY_128 (50kbps/2-FSK/433MHz band) has channels 0 - 6.
 */
-#define CONFIG_CHANNEL_MASK           { 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, \
+#define CONFIG_CHANNEL_MASK           { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, \
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
                                         0x00, 0x00, 0x00, 0x00, 0x00 }
 /*!

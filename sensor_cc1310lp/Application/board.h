@@ -52,7 +52,12 @@
 extern "C" {
 #endif
   
-#if defined(CC13XX_LAUNCHXL)
+#if defined (MY_CC13XX_LAUNCHXL)
+/**
+ * Here we use our own LaunPad config file for devel
+ */
+#include "My_LaunchPad/Board.h"
+#elif defined(CC13XX_LAUNCHXL)
 /** ============================================================================
  *  @file  board.h
  *
