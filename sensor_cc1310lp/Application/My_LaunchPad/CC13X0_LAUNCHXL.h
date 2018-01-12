@@ -148,6 +148,9 @@ extern const PIN_Config BoardGpioInitTable[];
 #define Board_PWMPIN6                       PIN_UNASSIGNED
 #define Board_PWMPIN7                       PIN_UNASSIGNED
 
+/* DS18B20 Temperature Sensor */
+#define CC1310_LAUNCHXL_DS18B20               IOID_22
+
 /** ============================================================================
  *  Instance identifiers
  *  ==========================================================================*/

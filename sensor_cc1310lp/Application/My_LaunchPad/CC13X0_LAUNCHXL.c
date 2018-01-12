@@ -114,6 +114,9 @@ const PIN_Config BoardGpioInitTable[] = {
     Board_SPI0_MISO | PIN_INPUT_EN | PIN_PULLDOWN,                                            /* SPI master in - slave out */
     Board_SPI0_CLK | PIN_INPUT_EN | PIN_PULLDOWN,                                             /* SPI clock */
 
+    // DS18B20 sensor
+    CC1310_LAUNCHXL_DS18B20 | PIN_GPIO_OUTPUT_EN | PIN_OPENDRAIN | PIN_DRVSTR_MIN,
+
     PIN_TERMINATE
 };
 #endif /* POWER_MEAS */

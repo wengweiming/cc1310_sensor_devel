@@ -83,6 +83,7 @@ extern "C" {
 #define     GPIO_write(n,m)
 
 #define     Board_I2C0              CC13X0_LAUNCHXL_I2C0
+#define     Board_DS18B20           CC1310_LAUNCHXL_DS18B20
 
 #ifdef __cplusplus
 }

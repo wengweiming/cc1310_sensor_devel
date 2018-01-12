@@ -61,6 +61,7 @@
 
 #include "sensor_bh1750.h"
 #include "board_lcd.h"
+#include "sensor_ds18b20.h"
 
 #ifdef FEATURE_NATIVE_OAD
 #include "oad_client.h"
@@ -179,6 +180,8 @@ STATIC Smsgs_humiditySensorField_t humiditySensor =
     { 0 };
 
 STATIC Smsgs_bh1750SensorField_t bh1750Sensor = {0};
+
+STATIC Smsgs_ds18b20sensorField_t ds18b20Sensor = {0};
 
 STATIC Llc_netInfo_t parentInfo = {0};
 
@@ -849,6 +852,10 @@ static void processSensorMsgEvt(void)
         memcpy(&sensor.bh1750Sensor, &bh1750Sensor,
                sizeof(Smsgs_bh1750SensorField_t));
     }
+    if (sensor.frameControl & Smsgs_dataFields_ds18b20Sensor)
+    {
+        memcpy(&sensor.ds18b20Sensor, &ds18b20Sensor, sizeof(Smsgs_ds18b20sensorField_t));
+    }
 
     /* inform the user interface */
     Ssf_sensorReadingUpdate(&sensor);
@@ -896,6 +903,10 @@ static bool sendSensorMessage(ApiMac_sAddr_t *pDstAddr, Smsgs_sensorMsg_t *pMsg)
     if(pMsg->frameControl & Smsgs_dataFields_bh1750Sensor)
     {
         len += SMSGS_SENSOR_BH1750_LEN;
+    }
+    if (pMsg->frameControl & Smsgs_dataFields_ds18b20Sensor)
+    {
+        len += SMSGS_SENSOR_DS18B20_LEN;
     }
 
     pMsgBuf = (uint8_t *)Ssf_malloc(len);
@@ -966,6 +977,10 @@ static bool sendSensorMessage(ApiMac_sAddr_t *pDstAddr, Smsgs_sensorMsg_t *pMsg)
         if(pMsg->frameControl & Smsgs_dataFields_bh1750Sensor)
         {
             pBuf = Util_bufferUint16(pBuf, pMsg->bh1750Sensor.light);
+        }
+        if (pMsg->frameControl & Smsgs_dataFields_ds18b20Sensor)
+        {
+            pBuf = Util_bufferUint16(pBuf, pMsg->ds18b20Sensor.temp);
         }
 
         ret = Sensor_sendMsg(Smsgs_cmdIds_sensorData, pDstAddr, true, len, pMsgBuf);
@@ -1185,6 +1200,12 @@ static uint16_t validateFrameControl(uint16_t frameControl)
         newFrameControl |= Smsgs_dataFields_bh1750Sensor;
     }
 #endif
+#if defined(DS18B20_SENSOR)
+    if (frameControl & Smsgs_dataFields_ds18b20Sensor)
+    {
+        newFrameControl |= Smsgs_dataFields_ds18b20Sensor;
+    }
+#endif
 
     return (newFrameControl);
 }
@@ -1358,5 +1379,17 @@ static void readSensors(void)
     } else {
         LCD_WRITE_STRING("BH1750 read failed", 0);
     }
+#endif
+
+#if defined(DS18B20_SENSOR)
+    DS18B20_Data dsData;
+
+    DS18B20_read(&dsData);
+   if (dsData.readFlag) {
+       ds18b20Sensor.temp = (uint16_t)(dsData.TempValue*10);
+       LCD_WRITE_STRING_VALUE("DS18B20_Data = ", ds18b20Sensor.temp, 10, 0);
+   } else {
+       LCD_WRITE_STRING("DS18B20 read failed", 0);
+   }
 #endif
 }
