@@ -152,6 +152,8 @@ extern const PIN_Config BoardGpioInitTable[];
 #define CC1310_LAUNCHXL_DS18B20               IOID_22
 /* DHT21 sensor */
 #define CC1310_LAUNCHXL_DHT21                 IOID_23
+/* MH-Z14A sensor */
+#define CC1310_LAUNCHXL_MHZ14A                IOID_24
 
 /** ============================================================================
  *  Instance identifiers

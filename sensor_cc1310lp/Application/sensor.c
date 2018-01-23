@@ -63,6 +63,7 @@
 #include "board_lcd.h"
 #include "sensor_ds18b20.h"
 #include "sensor_dh21.h"
+#include "sensor_mhz14a.h"
 
 #ifdef FEATURE_NATIVE_OAD
 #include "oad_client.h"
@@ -185,6 +186,8 @@ STATIC Smsgs_bh1750SensorField_t bh1750Sensor = {0};
 STATIC Smsgs_ds18b20sensorField_t ds18b20Sensor = {0};
 
 STATIC Smsgs_dh21sensorField_t dh21Sensor = {0};
+
+STATIC Smsgs_mhz14asensorField_t mhz14aSensor = {0};
 
 STATIC Llc_netInfo_t parentInfo = {0};
 
@@ -863,6 +866,10 @@ static void processSensorMsgEvt(void)
     {
         memcpy(&sensor.dh21Sensor, &dh21Sensor, sizeof(Smsgs_dh21sensorField_t));
     }
+    if(sensor.frameControl & Smsgs_dataFields_mhz14aSensor)
+    {
+        memcpy(&sensor.mhz14aSensor, &mhz14aSensor, sizeof(Smsgs_mhz14asensorField_t));
+    }
 
     /* inform the user interface */
     Ssf_sensorReadingUpdate(&sensor);
@@ -918,6 +925,10 @@ static bool sendSensorMessage(ApiMac_sAddr_t *pDstAddr, Smsgs_sensorMsg_t *pMsg)
     if (pMsg->frameControl & Smsgs_dataFields_dh21Sensor)
     {
         len += SMSGS_SENSOR_DH21_LEN;
+    }
+    if (pMsg->frameControl & Smsgs_dataFields_mhz14aSensor)
+    {
+        len += SMSGS_SENSOR_MHZ14A_LEN;
     }
 
     pMsgBuf = (uint8_t *)Ssf_malloc(len);
@@ -997,6 +1008,10 @@ static bool sendSensorMessage(ApiMac_sAddr_t *pDstAddr, Smsgs_sensorMsg_t *pMsg)
         {
             pBuf = Util_bufferUint16(pBuf, pMsg->dh21Sensor.temp);
             pBuf = Util_bufferUint16(pBuf, pMsg->dh21Sensor.humi);
+        }
+        if (pMsg->frameControl & Smsgs_dataFields_mhz14aSensor)
+        {
+            pBuf = Util_bufferUint16(pBuf, pMsg->mhz14aSensor.co2);
         }
 
         ret = Sensor_sendMsg(Smsgs_cmdIds_sensorData, pDstAddr, true, len, pMsgBuf);
@@ -1228,6 +1243,12 @@ static uint16_t validateFrameControl(uint16_t frameControl)
         newFrameControl |= Smsgs_dataFields_dh21Sensor;
     }
 #endif
+#if defined(MHZ14A_SENSOR)
+    if (frameControl & Smsgs_dataFields_mhz14aSensor)
+    {
+        newFrameControl |= Smsgs_dataFields_mhz14aSensor;
+    }
+#endif
 
     return (newFrameControl);
 }
@@ -1421,11 +1442,16 @@ static void readSensors(void)
     if (dhData.readFlag) {
         dh21Sensor.temp = dhData.tempValue;
         dh21Sensor.humi = dhData.humiValue;
-       LCD_WRITE_STRING_VALUE("DH21_Temp = ", dh21Sensor.temp, 10, 0);
-       LCD_WRITE_STRING_VALUE("DH21_Humi = ", dh21Sensor.humi, 10, 0);
+        LCD_WRITE_STRING_VALUE("DH21_Temp = ", dh21Sensor.temp, 10, 0);
+        LCD_WRITE_STRING_VALUE("DH21_Humi = ", dh21Sensor.humi, 10, 0);
     } else {
        LCD_WRITE_STRING("DH21 read failed", 0);
     }
+#endif
+
+#if defined(MHZ14A_SENSOR)
+    mhz14aSensor.co2 = MHZ14A_read();
+    LCD_WRITE_STRING_VALUE("MHZ14A_Data = ", mhz14aSensor.co2, 10, 0);
 #endif
 
     LCD_WRITE_STRING("===============================================", 0);

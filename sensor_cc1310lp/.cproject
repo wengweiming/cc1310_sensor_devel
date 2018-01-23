@@ -108,6 +108,7 @@
 									<listOptionValue builtIn="false" value="BH1750_SENSOR"/>
 									<listOptionValue builtIn="false" value="DS18B20_SENSOR"/>
 									<listOptionValue builtIn="false" value="DH21_SENSOR"/>
+									<listOptionValue builtIn="false" value="MHZ14A_SENSOR"/>
 									<listOptionValue builtIn="false" value="AUTO_START"/>
 									<listOptionValue builtIn="false" value="xASSERT_LEDS"/>
 									<listOptionValue builtIn="false" value="NV_RESTORE"/>

@@ -85,6 +85,7 @@ extern "C" {
 #define     Board_I2C0              CC13X0_LAUNCHXL_I2C0
 #define     Board_DS18B20           CC1310_LAUNCHXL_DS18B20
 #define     Board_DHT21             CC1310_LAUNCHXL_DHT21
+#define     Board_MHZ14A            CC1310_LAUNCHXL_MHZ14A
 
 #ifdef __cplusplus
 }

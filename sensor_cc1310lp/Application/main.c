@@ -70,6 +70,7 @@
 #include "sensor_bh1750.h"
 #include "sensor_ds18b20.h"
 #include "sensor_dh21.h"
+#include "sensor_mhz14a.h"
 
 /* Header files required for the temporary idle task function */
 #include <ti/drivers/Power.h>
@@ -322,6 +323,9 @@ Void taskFxn(UArg a0, UArg a1)
 #endif
 #if defined(DH21_SENSOR)
     DH21_init();
+#endif
+#if defined(MHZ14A_SENSOR)
+    MHZ14A_init();
 #endif
 
     /* Kick off application - Forever loop */
