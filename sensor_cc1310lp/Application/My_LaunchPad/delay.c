@@ -33,7 +33,7 @@ GPTimerCC26XX_Value msloadValue;
  */
 void Delay_shortUS(uint32_t usDelay)
 {
-    CPUdelay(10*usDelay);
+    CPUdelay(8*usDelay);
 //    uint32_t i = 0;
 //
 //    UInt key = Task_disable();

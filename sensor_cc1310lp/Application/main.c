@@ -69,6 +69,7 @@
 #include <ti/drivers/I2C.h>
 #include "sensor_bh1750.h"
 #include "sensor_ds18b20.h"
+#include "sensor_dh21.h"
 
 /* Header files required for the temporary idle task function */
 #include <ti/drivers/Power.h>
@@ -312,9 +313,16 @@ Void taskFxn(UArg a0, UArg a1)
     Sensor_init();
 
     // sensor initialization
+#if defined(BH1750_SENSOR)
     I2C_init();
     BH1750_init();
+#endif
+#if defined(DS18B20_SENSOR)
     DS18B20_init();
+#endif
+#if defined(DH21_SENSOR)
+    DH21_init();
+#endif
 
     /* Kick off application - Forever loop */
     while(1)
