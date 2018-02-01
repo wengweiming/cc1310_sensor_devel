@@ -140,7 +140,7 @@ extern "C"
  APIMAC_STD_ETSI_863_PHY_3 (50kbps/2-FSK/863MHz band) has channels 0 - 33.
  APIMAC_GENERIC_CHINA_433_PHY_128 (50kbps/2-FSK/433MHz band) has channels 0 - 6.
 */
-#define CONFIG_CHANNEL_MASK           { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, \
+#define CONFIG_CHANNEL_MASK           { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, \
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
                                         0x00, 0x00, 0x00, 0x00, 0x00 }
 /*!
@@ -198,14 +198,14 @@ extern "C"
     ((CONFIG_PHY_ID >= APIMAC_GENERIC_US_915_PHY_132) && (CONFIG_PHY_ID <= APIMAC_GENERIC_ETSI_863_PHY_133)))
 /*! Default Polling interval in milliseconds. It will get updated upon reception
  of a config request message */
-#define CONFIG_POLLING_INTERVAL      6000
+#define CONFIG_POLLING_INTERVAL      5000
 /*! PAN Advertisement Solicit trickle timer duration in milliseconds */
 #define CONFIG_PAN_ADVERT_SOLICIT_CLK_DURATION    6000
 /*! PAN Config Solicit trickle timer duration in milliseconds */
 #define CONFIG_PAN_CONFIG_SOLICIT_CLK_DURATION    6000
 /*! Default Reporting Interval - in milliseconds. It will get updated upon
  reception of a config request message */
-#define CONFIG_REPORTING_INTERVAL  180000
+#define CONFIG_REPORTING_INTERVAL  5000
 #else
 /*! Default Polling interval in milliseconds. It will get updated upon reception
  of a config request message */

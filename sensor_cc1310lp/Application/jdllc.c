@@ -289,7 +289,9 @@ static void processFHEvent(uint8_t *pFhFrameVar,
 static void populateInfo(ApiMac_deviceDescriptor_t *pDevInfo,
                          Llc_netInfo_t *pParentNetInfo);
 static void handleMaxDataFail(void);
-
+/*..................................................*/
+extern  ApiMac_sAddr_t collectorAddr = {0};
+/*..................................................*/
 /******************************************************************************
  Public Functions
  *****************************************************************************/
@@ -1209,7 +1211,13 @@ static void assocCnfCb(ApiMac_mlmeAssociateCnf_t *pData)
     Llc_netInfo_t parentInfo;
     ApiMac_deviceDescriptor_t devInfo;
     uint16_t randomNum = 0;
+    /*...........................................*/
+    uint8_t devicetype[3];
 
+    devicetype[0]=(uint8_t)Smgs_cmdIds_devicetype;
+    devicetype[1]=0x10;
+    devicetype[2]=0x10;
+   /*...............................................*/
     if(pData->status == ApiMac_assocStatus_success)
     {
         parentInfo.devInfo.panID = devInfoBlock.panID;
@@ -1303,7 +1311,9 @@ static void assocCnfCb(ApiMac_mlmeAssociateCnf_t *pData)
                 }
             }
         }
-
+//这里发送data1数据
+        Sensor_sendMsg(Smgs_cmdIds_devicetype,&collectorAddr,true,3,devicetype);
+        /*..................................................................*/
     }
     else if((pData->status == ApiMac_assocStatus_panAtCapacity) ||
             (pData->status ==ApiMac_assocStatus_panAccessDenied))

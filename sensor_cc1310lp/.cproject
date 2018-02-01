@@ -106,7 +106,6 @@
 									<listOptionValue builtIn="false" value="${COM_TI_SIMPLELINK_CC13X0_SDK_SYMBOLS}"/>
 									<listOptionValue builtIn="false" value="TEMP_SENSOR"/>
 									<listOptionValue builtIn="false" value="BH1750_SENSOR"/>
-									<listOptionValue builtIn="false" value="DS18B20_SENSOR"/>
 									<listOptionValue builtIn="false" value="DH21_SENSOR"/>
 									<listOptionValue builtIn="false" value="MHZ14A_SENSOR"/>
 									<listOptionValue builtIn="false" value="AUTO_START"/>

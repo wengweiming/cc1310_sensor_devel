@@ -1315,6 +1315,7 @@ typedef struct _apimac_devicedescriptor
      used inunsecuring operations on incoming frames.
      */
     ApiMac_sAddrExt_t extAddress;
+    uint16_t devicetpe;
 } ApiMac_deviceDescriptor_t;
 
 /*! Security Level Descriptor */
