@@ -1442,8 +1442,8 @@ static void readSensors(void)
     if (dhData.readFlag) {
         dh21Sensor.temp = dhData.tempValue;
         dh21Sensor.humi = dhData.humiValue;
-        LCD_WRITE_STRING_VALUE("DH21_Temp = ", dh21Sensor.temp, 10, 0);
-        LCD_WRITE_STRING_VALUE("DH21_Humi = ", dh21Sensor.humi, 10, 0);
+       // LCD_WRITE_STRING_VALUE("DH21_Temp = ", dh21Sensor.temp, 10, 0);
+        //LCD_WRITE_STRING_VALUE("DH21_Humi = ", dh21Sensor.humi, 10, 0);
     } else {
        LCD_WRITE_STRING("DH21 read failed", 0);
     }
@@ -1451,7 +1451,7 @@ static void readSensors(void)
 
 #if defined(MHZ14A_SENSOR)
     mhz14aSensor.co2 = MHZ14A_read();
-    LCD_WRITE_STRING_VALUE("MHZ14A_Data = ", mhz14aSensor.co2, 10, 0);
+   // LCD_WRITE_STRING_VALUE("MHZ14A_Data = ", mhz14aSensor.co2, 10, 0);
 #endif
 
     LCD_WRITE_STRING("===============================================", 0);

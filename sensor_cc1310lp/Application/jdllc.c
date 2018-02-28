@@ -1215,8 +1215,8 @@ static void assocCnfCb(ApiMac_mlmeAssociateCnf_t *pData)
     uint8_t devicetype[3];
 
     devicetype[0]=(uint8_t)Smgs_cmdIds_devicetype;
-    devicetype[1]=0x10;
-    devicetype[2]=0x10;
+    devicetype[1]=0x02;
+    devicetype[2]=0x11;
    /*...............................................*/
     if(pData->status == ApiMac_assocStatus_success)
     {
